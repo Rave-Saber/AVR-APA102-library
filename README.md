@@ -11,21 +11,31 @@ single colors, multiple colors, extension, retraction, & scrolling colors.
 
 You need to define some macro's to use this library:
 
-* TODO: add macros & meanings
+* `SCK_DDR`
+* `SCK`
+* `MOSI_DDR`
+* `MOSI_PORT`
+* `MOSI`
+* `SS_DDR`
+* `SS_PORT`
+* `SS`
+* `LED_COUNT`
 
-Then just include this library in your compilation process:
+Then just include the `src` folder in your compilation process:
 
-* TODO: add example compile command
+    avr-gcc -I /path/to/repo/src ...
 
 You can check out the example code which has been tested with a Sparkfun
-Lumenati 8-LED strip & an Atmel ATmega168a microcontroller.
+Lumenati 8-LED strip & an Atmel ATmega168a microcontroller. To build the hex
+file, run `make`. To flash the code using a `USBtinyISP`, run `make flash`.
 
-* TODO: Add example app with makefile
 
 ## TODO
 
-* Add a RGBA type that uses the alpha level to scale the RGB channels instead
-  of the APA102's "brightness" bits.
+* Add an RGBAColor type that uses the alpha level to scale the RGB channels
+  instead of the APA102's "brightness" bits(since those introduce stuttering).
+* Color mixing/blending, building gradients between sequence of colors.
+* More effect functions.
 
 
 # License
