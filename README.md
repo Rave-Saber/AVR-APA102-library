@@ -23,7 +23,7 @@ You need to define some macro's to use this library:
 
 Then just include the `src` folder in your compilation process:
 
-    avr-gcc -I /path/to/repo/src ...
+    avr-gcc -I /path/to/this/repo/src ...
 
 You can check out the example code which has been tested with a Sparkfun
 Lumenati 8-LED strip & an Atmel ATmega168a microcontroller. To build the hex
