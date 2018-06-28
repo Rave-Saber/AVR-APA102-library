@@ -1,5 +1,5 @@
-#ifndef APA102_EFFECTS_H
-#define APA102_EFFECTS_H
+#ifndef APA102_EFFECTS_SIMPLE_H
+#define APA102_EFFECTS_SIMPLE_H
 
 #include <stdbool.h>
 #include "apa102.h"

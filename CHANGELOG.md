@@ -2,6 +2,7 @@
 
 ## master
 
+* Move `apa102_effects.h` functions to `apa102_effects_simple.h`.
 
 
 ## v1.0.0

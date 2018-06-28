@@ -1,7 +1,7 @@
 #include <stdbool.h>
 #include <util/delay.h>
 #include <apa102.h>
-#include <apa102_effects.h>
+#include <apa102_effects_simple.h>
 
 // delay the cpu by a variable number of milliseconds
 static inline void variable_delay(uint16_t ms_delay) {
