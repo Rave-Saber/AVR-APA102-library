@@ -6,6 +6,12 @@ hardware SPI on an AVR microcontroller.
 Some helper functions are included in a separate file for simple effects like
 single colors, multiple colors, extension, retraction, & scrolling colors.
 
+The rest of this library is still in active development & subject to change.
+Eventually we'd like to support:
+* Extension/retraction while playing effects
+* Assigning different patterns to different LED ranges
+* User-defined pattern playback
+
 
 ## Usage
 
@@ -40,11 +46,15 @@ flash`.
   directly outputting each step's colors to SPI. This would allow saving the
   current color array so we can retract and extend any pattern instead of just
   solid colors.
+* LED powersaving - light only every Xth LED, or set a maximum current the LEDs
+  can use & use that to scale LED duty cycles.
 * Allow combining multiple effects as a single pattern - e.g., half of the
   LEDs as a scroll effect and the other as a flash effect.
 * Color mixing/blending, building gradients between sequence of colors.
-* More effects! E.g., scrolling effect that widens or fades the color bands
-  instead of repeating them.
+* More effects!
+    * scrolling effect that widens or fades the color bands instead of repeating them
+    * fixed number of scrolling bands
+    * static repeating bands with fixed width or count.
 * Add an RGBAColor type that uses the alpha level to scale the RGB channels
   instead of the APA102's "brightness" bits(since those introduce stuttering).
 
