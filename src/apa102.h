@@ -113,4 +113,13 @@ inline void apa102_set_led(const RGBColor_t color) {
     apa102_transmit_byte(color.red);
 }
 
+/* Set all the LEDs to the given color */
+inline void apa102_set_all_leds(const RGBColor_t color) {
+    apa102_start();
+    for (uint8_t i = 0; i < LED_COUNT; i++) {
+        apa102_set_led(color);
+    }
+    apa102_end();
+}
+
 #endif
