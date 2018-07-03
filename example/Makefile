@@ -1,5 +1,5 @@
 MCU = atmega168
-F_CPU = 1000000UL
+F_CPU = 8000000UL
 
 LIBDIR = ../src
 
