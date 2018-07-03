@@ -1,7 +1,7 @@
 #include <avr/power.h>
 #include <util/delay.h>
 #include <apa102.h>
-#include <apa102_effects_simple.h>
+#include <apa102_simple_effects.h>
 
 
 int main(void) {
