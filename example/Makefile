@@ -1,9 +1,25 @@
+# The number of LED you want to light up
+LED_COUNT = 8
+
+
+# ATmega168a PDIP-28
 MCU = atmega168
+MOSI = PB3
+MOSI_DDR = DDRB
+MOSI_PORT = PORTB
+SS = PB2
+SS_DDR = DDRB
+SS_PORT = PORTB
+SCK = PB5
+SCK_DDR = DDRB
+
+
 F_CPU = 8000000UL
+
+PROGRAMMER = usbtiny
 
 LIBDIR = ../src
 
-PROGRAMMER = usbtiny
 
 CC = avr-gcc
 OBJCOPY = avr-objcopy
@@ -17,20 +33,19 @@ SOURCES=$(wildcard *.c $(LIBDIR)/*.c)
 OBJECTS=$(SOURCES:.c=.o)
 HEADERS=$(SOURCES:.c=.h)
 
-CPPFLAGS  = -DF_CPU=$(F_CPU) -I. -I$(LIBDIR)
-# ATmega168a DIP layout
-CPPFLAGS += -DMOSI=PB3 -DMOSI_DDR=DDRB -DMOSI_PORT=PORTB
-CPPFLAGS += -DSS=PB2 -DSS_DDR=DDRB -DSS_PORT=PORTB
-CPPFLAGS += -DSCK=PB5 -DSCK_DDR=DDRB
-# Lumenati 8-LED Strip
-CPPFLAGS += -DLED_COUNT=8
+CPPFLAGS  = -I. -I$(LIBDIR)
+CPPFLAGS += -DF_CPU=$(F_CPU)
+CPPFLAGS += -DMOSI=$(MOSI) -DMOSI_DDR=$(MOSI_DDR) -DMOSI_PORT=$(MOSI_PORT)
+CPPFLAGS += -DSS=$(SS) -DSS_DDR=$(SS_DDR) -DSS_PORT=$(SS_PORT)
+CPPFLAGS += -DSCK=$(SCK) -DSCK_DDR=$(SCK_DDR)
+CPPFLAGS += -DLED_COUNT=$(LED_COUNT)
 
 CFLAGS  = -Os -g -std=gnu99 -Wall
-CFLAGS += -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums 
-CFLAGS += -ffunction-sections -fdata-sections 
+CFLAGS += -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums
+CFLAGS += -ffunction-sections -fdata-sections
 
-LDFLAGS  = -Wl,-Map,$(TARGET).map 
-LDFLAGS += -Wl,--gc-sections 
+LDFLAGS  = -Wl,-Map,$(TARGET).map
+LDFLAGS += -Wl,--gc-sections
 
 TARGET_ARCH = -mmcu=$(MCU)
 
