@@ -53,7 +53,7 @@ inline RGBColor_t rgb(const uint32_t color) {
 }
 
 /* Initialize Hardware SPI for the APA102 LEDs. This runs with a clock
- * prescaler of 1/2 & takes over your MOSI, SCK, & SS pins. 
+ * prescaler of 1/2 & takes over your MOSI, SCK, & SS pins.
  */
 inline void apa102_init_spi(void) {
     MOSI_DDR |= (1 << MOSI);
@@ -99,7 +99,12 @@ inline void apa102_start(void) {
  *
  */
 inline void apa102_end(void) {
-    uint8_t stop_bytes = (LED_COUNT + 15) / 16;
+#ifdef STARTING_LED
+    uint8_t total_leds = LED_COUNT + STARTING_LED - 1;
+#else
+    uint8_t total_leds = LED_COUNT;
+#endif
+    uint8_t stop_bytes = (total_leds + 15) / 16;
     for (uint8_t i = 0; i < stop_bytes; i++) {
         apa102_transmit_byte(0xff);
     }
@@ -113,13 +118,29 @@ inline void apa102_set_led(const RGBColor_t color) {
     apa102_transmit_byte(color.red);
 }
 
+#ifdef STARTING_LED
+const RGBColor_t BLANK_LED;
+/* Send the required number of 0x0000000 LED frames to shift the first colored
+ * LED to the `STARTING_LED` position.
+ */
+inline void shift_starting_led(void) {
+    for (uint8_t i = 1; i < STARTING_LED; i++) {
+        apa102_set_led(BLANK_LED);
+    }
+}
+#endif
+
 /* Set all the LEDs to the given color */
 inline void apa102_set_all_leds(const RGBColor_t color) {
     apa102_start();
+#ifdef STARTING_LED
+    shift_starting_led();
+#endif
     for (uint8_t i = 0; i < LED_COUNT; i++) {
         apa102_set_led(color);
     }
     apa102_end();
 }
+
 
 #endif

@@ -30,6 +30,9 @@ void scroll(const RGBColor_t *sequence, const uint8_t length, const bool reverse
     uint8_t modulus = length > LED_COUNT ? LED_COUNT : length;
     for (uint8_t shift = 0; shift < modulus; shift++) {
         apa102_start();
+#ifdef STARTING_LED
+        shift_starting_led();
+#endif
         for (uint8_t led = 0; led < LED_COUNT; led++) {
             uint8_t led_shift = led;
             if (!reverse) {
@@ -49,6 +52,9 @@ void extend(const RGBColor_t color, const uint16_t delay) {
     uint8_t current_level = 0;
     while (current_level <= LED_COUNT) {
         apa102_start();
+#ifdef STARTING_LED
+        shift_starting_led();
+#endif
         for (uint8_t led = 0; led < LED_COUNT; led++) {
             if (led + 1 <= current_level) {
                 apa102_set_led(color);
@@ -66,6 +72,9 @@ void retract(const RGBColor_t color, const uint16_t delay) {
     uint8_t current_level = LED_COUNT;
     while (current_level != 255) {
         apa102_start();
+#ifdef STARTING_LED
+        shift_starting_led();
+#endif
         for (uint8_t led = 0; led < LED_COUNT; led++) {
             if ((led + 1) <= current_level) {
                 apa102_set_led(color);

@@ -2,6 +2,8 @@
 
 ## master
 
+* Add an optional `STARTING_LED` macro to shift the controlled LEDs down the
+  strip by prepending sequences with blank LED frames.
 * Move `apa102_effects.h` functions to `apa102_simple_effects.h`.
 
 

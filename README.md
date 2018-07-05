@@ -27,8 +27,12 @@ You need to define some macro's to use this library:
 * `SS`
 * `LED_COUNT`
 
-These defines should be for the HW SPI pins of your AVR microcontroller. This
+The pin defines should be for the HW SPI pins of your AVR microcontroller. This
 library does not support using arbitrary I/O pins.
+
+You can optionally define `STARTING_LED` macro to shift the first lit LED down
+the strip. You should have at least `LED_COUNT + STARTING_LED - 1` LEDs in your
+strip.
 
 Then just include the `src` folder in your compilation process:
 

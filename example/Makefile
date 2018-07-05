@@ -1,6 +1,10 @@
 # The number of LED you want to light up
 LED_COUNT = 8
 
+# Uncomment this to shift the first lit LED further down the strip.
+# Your strip should have at least (STARTING_LED + LED_COUNT - 1) LEDs.
+#STARTING_LED = 137
+
 
 # ATmega168a PDIP-28
 MCU = atmega168
@@ -39,6 +43,9 @@ CPPFLAGS += -DMOSI=$(MOSI) -DMOSI_DDR=$(MOSI_DDR) -DMOSI_PORT=$(MOSI_PORT)
 CPPFLAGS += -DSS=$(SS) -DSS_DDR=$(SS_DDR) -DSS_PORT=$(SS_PORT)
 CPPFLAGS += -DSCK=$(SCK) -DSCK_DDR=$(SCK_DDR)
 CPPFLAGS += -DLED_COUNT=$(LED_COUNT)
+ifdef STARTING_LED
+CPPFLAGS += -DSTARTING_LED=$(STARTING_LED)
+endif
 
 CFLAGS  = -Os -g -std=gnu99 -Wall
 CFLAGS += -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums
