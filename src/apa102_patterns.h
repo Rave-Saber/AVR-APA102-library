@@ -13,8 +13,9 @@ extern uint8_t current_pattern_step;
 
 // Delay for a variable amount of milliseconds
 static inline void variable_delay(uint16_t ms_delay) {
-    for (uint16_t i = 0; i < ms_delay; i++) {
+    while (ms_delay) {
         _delay_ms(1);
+        ms_delay--;
     }
 }
 
