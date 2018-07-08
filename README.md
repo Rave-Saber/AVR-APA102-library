@@ -3,14 +3,16 @@
 This is a simple C library for driving a strip of APA102 LEDs using the
 hardware SPI on an AVR microcontroller.
 
-Some helper functions are included in a separate file for simple effects like
-single colors, multiple colors, extension, retraction, & scrolling colors.
+The `apa102` module contains the basic functions you need to control LEDS -
+initializing the SPI peripherals & sending start, LED, & end frames in the
+proper format.
 
 The rest of this library is still in active development & subject to change.
-Eventually we'd like to support:
-* Extension/retraction while playing effects
-* Assigning different patterns to different LED ranges
-* User-defined pattern playback
+
+There are functions to render color patterns like flashes, ribbons, scrolling,
+extension, & retraction. The `apa102_simple_effects` module renders colors
+directly to the LED strip, while the `apa102_patterns` module stores colors in
+an array before rendering them.
 
 
 ## Usage
@@ -46,10 +48,12 @@ flash`.
 
 ## TODO
 
-* Change effects so they generate color arrays for a given step, instead of
-  directly outputting each step's colors to SPI. This would allow saving the
-  current color array so we can retract and extend any pattern instead of just
-  solid colors.
+* User-defined pattern functions via callbacks
+* Support assigning different patterns to specific LED ranges
+    * E.g., rgb ribbon at ends, rgb flash in center
+    * Probably requires re-writing patterns module to calculate single LED
+      colors based on both step count and LED index. Is that too performance
+      intensive?
 * LED powersaving - light only every Xth LED, or set a maximum current the LEDs
   can use & use that to scale LED duty cycles.
 * Allow combining multiple effects as a single pattern - e.g., half of the

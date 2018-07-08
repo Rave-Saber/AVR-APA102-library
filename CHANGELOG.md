@@ -2,6 +2,13 @@
 
 ## master
 
+* Add an `apa102_patterns` module. Instead of directly outputting sequences
+  like the `apa102_simple_effects` module, the patterns module calculates the
+  number of steps in a pattern, tracks the current step in the pattern, and
+  writes the sequence to an `RGBColor_t` array. The array can then be modified
+  and output to the DotStar strip. This allows manipulations like
+  extension/retraction while playing a pattern, which the
+  `apa102_simple_effects` module does not support.
 * Add an optional `STARTING_LED` macro to shift the controlled LEDs down the
   strip by prepending sequences with blank LED frames.
 * Move `apa102_effects.h` functions to `apa102_simple_effects.h`.
