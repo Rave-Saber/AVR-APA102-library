@@ -49,6 +49,8 @@ flash`.
 ## TODO
 
 * User-defined pattern functions via callbacks
+* Make `current_sequence` array in `apa102_patterns` available to library
+  consumers - either by exposing the array or functions to modify it.
 * Support assigning different patterns to specific LED ranges
     * E.g., rgb ribbon at ends, rgb flash in center
     * Probably requires re-writing patterns module to calculate single LED
@@ -56,8 +58,6 @@ flash`.
       intensive?
 * LED powersaving - light only every Xth LED, or set a maximum current the LEDs
   can use & use that to scale LED duty cycles.
-* Allow combining multiple effects as a single pattern - e.g., half of the
-  LEDs as a scroll effect and the other as a flash effect.
 * Color mixing/blending, building gradients between sequence of colors.
 * More effects!
     * scrolling effect that widens or fades the color bands instead of repeating them
