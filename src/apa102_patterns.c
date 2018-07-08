@@ -9,6 +9,7 @@ static RGBColor_t current_sequence[LED_COUNT];
 
 extern inline void variable_delay(uint16_t ms_delay);
 extern inline void increment_current_step(void);
+extern inline void run_step(const GenericPattern_t *pattern_data);
 
 static inline void set_all(const RGBColor_t color);
 

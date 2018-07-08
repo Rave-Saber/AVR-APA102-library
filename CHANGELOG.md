@@ -2,6 +2,9 @@
 
 ## master
 
+* Add the `run_step` function to the `apa102_patterns` module. This combines
+  the act of updating & outputting a pattern's sequence, delaying for the
+  appropriate amount of time, & incrementing the step count.
 * Add an `apa102_patterns` module. Instead of directly outputting sequences
   like the `apa102_simple_effects` module, the patterns module calculates the
   number of steps in a pattern, tracks the current step in the pattern, and

@@ -72,24 +72,16 @@ int main(void) {
 
 
         /* Patterns */
-        uint16_t delay = 0;
         initialize_pattern(patterns);
         update_sequence(patterns);
         extend_current_sequence(500);
         for (uint8_t pattern_index = 0; pattern_index < pattern_count; pattern_index++) {
             initialize_pattern(patterns + pattern_index);
             for (uint8_t i = 0; i < 5; i++) {
-                // TODO: Add `run_step` function to update/output/delay/increment sequence
-                delay = update_sequence(patterns + pattern_index);
-                output_current_sequence();
-                variable_delay(delay);
-                increment_current_step();
+                run_step(patterns + pattern_index);
                 if (total_pattern_steps > 1) {
                     while (current_pattern_step != 0) {
-                        delay = update_sequence(patterns + pattern_index);
-                        output_current_sequence();
-                        variable_delay(delay);
-                        increment_current_step();
+                        run_step(patterns + pattern_index);
                     }
                 } else {
                     _delay_ms(1000);

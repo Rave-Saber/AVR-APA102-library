@@ -68,6 +68,14 @@ inline void increment_current_step(void) {
     current_pattern_step = (current_pattern_step + 1) % total_pattern_steps;
 }
 
+/* Update the Sequence, Output it, Delay, & Increment the step count */
+static inline void run_step(const GenericPattern_t *pattern_data) {
+    uint16_t delay = update_sequence(pattern_data);
+    output_current_sequence();
+    variable_delay(delay);
+    increment_current_step();
+}
+
 
 /* Pattern Steppers
  *
