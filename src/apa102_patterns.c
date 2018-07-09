@@ -174,10 +174,7 @@ uint16_t wide_scroll_set_sequence(const WideScrollArgs_t *args) {
 
 /* EXTEND & RETRACT */
 // extend/retract output directly to hardware SPI
-// TODO: if extend/retract triggered when sequence is all blank, increment
-// until not so, then run action.
-// TODO: alternatively, keep running pattern while turning LEDs on/off.
-void extend_current_sequence(uint16_t delay) {
+void extend_pattern(const GenericPattern_t *pattern_data, uint16_t delay) {
     uint8_t current_level = 0;
     while (current_level <= LED_COUNT) {
         apa102_start();
@@ -194,10 +191,12 @@ void extend_current_sequence(uint16_t delay) {
         apa102_end();
         variable_delay(delay);
         current_level++;
+        increment_current_step();
+        update_sequence(pattern_data);
     }
 }
 
-void retract_current_sequence(uint16_t delay) {
+void retract_pattern(const GenericPattern_t *pattern_data, uint16_t delay) {
     uint8_t current_level = LED_COUNT;
     while (current_level != 255) {
         apa102_start();
@@ -214,6 +213,8 @@ void retract_current_sequence(uint16_t delay) {
         apa102_end();
         variable_delay(delay);
         current_level--;
+        increment_current_step();
+        update_sequence(pattern_data);
     }
 }
 

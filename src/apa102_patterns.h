@@ -137,8 +137,13 @@ uint8_t wide_scroll_step_count(void);
 uint16_t wide_scroll_set_sequence(const WideScrollArgs_t *args);
 
 // Extend/Retract
-void extend_current_sequence(const uint16_t delay);
-void retract_current_sequence(const uint16_t delay);
+/* These effects assume the desired pattern_data is already initialized. They
+ * will increase/reduce the amount of LEDs shown while playing the given
+ * pattern. The pattern's delay is ignored and the delay argument is used
+ * instead - this allows faster extension/retraction with slow patterns.
+ */
+void extend_pattern(const GenericPattern_t *pattern_data, const uint16_t delay);
+void retract_pattern(const GenericPattern_t *pattern_data, const uint16_t delay);
 
 
 #endif

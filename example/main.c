@@ -74,7 +74,7 @@ int main(void) {
         /* Patterns */
         initialize_pattern(patterns);
         update_sequence(patterns);
-        extend_current_sequence(500);
+        extend_pattern(patterns, 500);
         for (uint8_t pattern_index = 0; pattern_index < pattern_count; pattern_index++) {
             initialize_pattern(patterns + pattern_index);
             for (uint8_t i = 0; i < 5; i++) {
@@ -89,7 +89,7 @@ int main(void) {
             }
         }
         update_sequence(patterns + pattern_count - 1);
-        retract_current_sequence(500);
+        retract_pattern(patterns + pattern_count - 1, 500);
 
 
         _delay_ms(500);

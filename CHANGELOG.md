@@ -2,6 +2,10 @@
 
 ## master
 
+* Replace the extend/retract `_current_sequence` functions with
+  `extend_pattern` & `retract_pattern` functions. These functions play the
+  patterns while extending & retracting, instead of displaying a single
+  sequence from a pattern.
 * Add the `run_step` function to the `apa102_patterns` module. This combines
   the act of updating & outputting a pattern's sequence, delaying for the
   appropriate amount of time, & incrementing the step count.
