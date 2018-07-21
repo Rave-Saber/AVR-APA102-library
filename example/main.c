@@ -4,32 +4,31 @@
 #include <apa102_simple_effects.h>
 #include <apa102_patterns.h>
 
+/* Base Colors */
+#define RED { 0x7f, 0x00, 0x00 }
+#define GREEN { 0x00, 0x7f, 0x00 }
+#define BLUE { 0x00, 0x00, 0x7f }
+#define ORANGE { 0x7f, 0x20, 0x00 }
+#define YELLOW { 0x7f, 0x7f, 0x00 }
+#define INDIGO { 0x25, 0x00, 0x41 }
+#define VIOLET { 0x4a, 0x00, 0x69 }
+
+/* Red->Green->Blue Sequence */
+static const RGBColor_t rgb_sequence[3] =
+    { RED, GREEN, BLUE };
+
+/* ROYGBIV Sequence */
+static const RGBColor_t rainbow_sequence[7] =
+    { RED, ORANGE, YELLOW, GREEN, BLUE, INDIGO, VIOLET };
+
 
 int main(void) {
     apa102_init_spi();
     clock_prescale_set(clock_div_1);
 
-    /* Simple Effects */
-    const RGBColor_t rgb_sequence[3] =
-        { rgb(0xff0000)
-        , rgb(0x00ff00)
-        , rgb(0x0000ff)
-        };
-
-    const RGBColor_t rainbow_sequence[7] =
-        { rgb(0xff0000)
-        , rgb(0xff7f00)
-        , rgb(0xffff00)
-        , rgb(0x00ff00)
-        , rgb(0x0000ff)
-        , rgb(0x4b0082)
-        , rgb(0x9400d3)
-        };
-
-
     /* Patterns */
     const SolidArgs_t solid_red =
-        rgb(0xff0000);
+        RED;
 
     const WideScrollArgs_t rainbow_wide_scroll =
         { .sequence = rainbow_sequence, .length = 7, .delay = 200 };
