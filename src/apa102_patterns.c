@@ -177,6 +177,7 @@ uint16_t wide_scroll_set_sequence(const WideScrollArgs_t *args) {
 void extend_pattern(const GenericPattern_t *pattern_data, uint16_t delay) {
     uint8_t current_level = 0;
     while (current_level <= LED_COUNT) {
+        update_sequence(pattern_data);
         apa102_start();
 #ifdef STARTING_LED
         shift_starting_led();
@@ -192,13 +193,13 @@ void extend_pattern(const GenericPattern_t *pattern_data, uint16_t delay) {
         variable_delay(delay);
         current_level++;
         increment_current_step();
-        update_sequence(pattern_data);
     }
 }
 
 void retract_pattern(const GenericPattern_t *pattern_data, uint16_t delay) {
     uint8_t current_level = LED_COUNT;
     while (current_level != 255) {
+        update_sequence(pattern_data);
         apa102_start();
 #ifdef STARTING_LED
         shift_starting_led();
@@ -214,7 +215,6 @@ void retract_pattern(const GenericPattern_t *pattern_data, uint16_t delay) {
         variable_delay(delay);
         current_level--;
         increment_current_step();
-        update_sequence(pattern_data);
     }
 }
 

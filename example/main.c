@@ -73,10 +73,11 @@ int main(void) {
 
         /* Patterns */
         initialize_pattern(patterns);
-        update_sequence(patterns);
         extend_pattern(patterns, 500);
         for (uint8_t pattern_index = 0; pattern_index < pattern_count; pattern_index++) {
-            initialize_pattern(patterns + pattern_index);
+            if (pattern_index != 0) {
+                initialize_pattern(patterns + pattern_index);
+            }
             for (uint8_t i = 0; i < 5; i++) {
                 run_step(patterns + pattern_index);
                 if (total_pattern_steps > 1) {
@@ -84,11 +85,11 @@ int main(void) {
                         run_step(patterns + pattern_index);
                     }
                 } else {
+                    // Only one step so we can just wait
                     _delay_ms(1000);
                 }
             }
         }
-        update_sequence(patterns + pattern_count - 1);
         retract_pattern(patterns + pattern_count - 1, 500);
 
 

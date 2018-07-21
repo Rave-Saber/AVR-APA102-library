@@ -50,7 +50,7 @@ flash`.
 
 * User-defined pattern functions via callbacks
 * Make `current_sequence` array in `apa102_patterns` available to library
-  consumers - either by exposing the array or functions to modify it.
+  consumers? Either by exposing the array or functions to modify it.
 * Support assigning different patterns to specific LED ranges
     * E.g., rgb ribbon at ends, rgb flash in center
     * Probably requires re-writing patterns module to calculate single LED

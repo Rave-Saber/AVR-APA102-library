@@ -97,7 +97,7 @@ typedef RGBColor_t SolidArgs_t;
 uint8_t solid_step_count(void);
 uint16_t solid_set_sequence(const SolidArgs_t *args);
 
-// Flash
+// Flash - solid colors interspersed with blank gaps
 typedef struct FlashArgs {
     const RGBColor_t *sequence;
     uint8_t length;
@@ -107,7 +107,7 @@ typedef struct FlashArgs {
 uint8_t flash_step_count(const uint8_t sequence_len);
 uint16_t flash_set_sequence(const FlashArgs_t *args);
 
-// Ribbon
+// Ribbon - solid colors with no blank gaps
 typedef struct RibbonArgs {
     const RGBColor_t *sequence;
     uint8_t length;
@@ -116,7 +116,7 @@ typedef struct RibbonArgs {
 uint8_t ribbon_step_count(const uint8_t sequence_len);
 uint16_t ribbon_set_sequence(const RibbonArgs_t *args);
 
-// Scroll - sequence repeats if shorter than LED count
+// Scroll - move sequence up/down strip - repeating if shorter than LED count
 // TODO: Change `reverse` to ScrollDirection enum - ScrollDown/ScrollUp
 typedef struct ScrollArgs {
     const RGBColor_t *sequence;
@@ -128,6 +128,7 @@ uint8_t scroll_step_count(const uint8_t sequence_len);
 uint16_t scroll_set_sequence(const ScrollArgs_t *args);
 
 // Wide Scroll - extend color bands instead of repeating
+// TODO: Add ScrollDirection
 typedef struct WideScrollArgs {
     const RGBColor_t *sequence;
     uint8_t length;
