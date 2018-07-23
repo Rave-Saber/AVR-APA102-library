@@ -54,6 +54,11 @@ void initialize_pattern(const GenericPattern_t *pattern_data) {
             playing_pattern_series = true;
             break;
         }
+        case CUSTOM: {
+            CustomPatternArgs_t *args = (CustomPatternArgs_t *) type_args;
+            total_pattern_steps = args->step_count_function(args->custom_data);
+            break;
+        }
     }
 }
 
@@ -83,6 +88,11 @@ uint16_t update_sequence(const GenericPattern_t *pattern_data) {
                 playing_pattern_series = true;
             }
             delay = update_sequence(&current_pattern);
+            break;
+        }
+        case CUSTOM: {
+            CustomPatternArgs_t *args = (CustomPatternArgs_t *) type_args;
+            delay = args->set_sequence_function(current_sequence, args->custom_data);
             break;
         }
     }

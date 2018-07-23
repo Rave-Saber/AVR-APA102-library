@@ -10,9 +10,15 @@ proper format.
 The rest of this library is still in active development & subject to change.
 
 There are functions to render color patterns like flashes, ribbons, scrolling,
-extension, & retraction. The `apa102_simple_effects` module renders colors
-directly to the LED strip, while the `apa102_patterns` module stores colors in
-an array before rendering them.
+extension, & retraction.
+
+The `apa102_simple_effects` module renders colors directly to the LED strip and
+contains limited functionality. For example, the extension/retraction effects
+only support solid colors.
+
+The `apa102_patterns` module contains more patterns, pattern chaining, & the
+ability to define custom patterns. It supports extension & retraction for any
+pattern type.
 
 
 ## Usage

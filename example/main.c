@@ -1,5 +1,6 @@
 #include <avr/power.h>
 #include <util/delay.h>
+#include <stdlib.h>
 #include <apa102.h>
 #include <apa102_simple_effects.h>
 #include <apa102_patterns.h>
@@ -140,13 +141,73 @@ static const SeriesArgs_t rgb_rainbow_scroll_series = {
 };
 
 
+/* Custom Patterns */
+/* This pattern fades between two colors by switching random LEDs one by one.
+ * We then use the pattern to create a `SERIES` pattern that fades between two
+ * colors.
+ */
+typedef struct RandomFadeArgs {
+    RGBColor_t start_color;
+    RGBColor_t end_color;
+    uint8_t delay;
+} RandomFadeArgs_t;
+uint8_t random_color_fade_step_count(void *custom_data) {
+    return LED_COUNT + 2;
+}
+uint16_t random_color_fade_set_sequence(RGBColor_t *sequence, void *custom_data) {
+    const RandomFadeArgs_t *args = (RandomFadeArgs_t *) custom_data;
+    if (current_pattern_step == 0 || current_pattern_step == LED_COUNT + 1) {
+        const RGBColor_t *color = current_pattern_step == 0 ?
+            &(args->start_color) : &(args->end_color);
+        for (uint8_t i = 0; i < LED_COUNT; i++) {
+            *(sequence + i) = *color;
+        }
+    } else {
+        bool color_changed = false;
+        while (!color_changed) {
+            uint8_t random_led = rand() / (RAND_MAX / LED_COUNT + 1);
+            if (!rgbcolor_equal((sequence + random_led), &(args->end_color))) {
+                *(sequence + random_led) = args->end_color;
+                color_changed = true;
+            }
+        }
+    }
+    return args->delay;
+}
+/* Make a SERIES pattern for back to back fades */
+uint8_t green_blue_fade_series_steps(void) {
+    return 2;
+}
+GenericPattern_t green_blue_fade_series_patterns(void) {
+    static RandomFadeArgs_t args =
+        { .delay = 35, .start_color = GREEN, .end_color = BLUE };
+    static const CustomPatternArgs_t custom_args = {
+        .step_count_function = random_color_fade_step_count,
+        .set_sequence_function = random_color_fade_set_sequence,
+        .custom_data = (void *) &args,
+    };
+    static const GenericPattern_t pattern = CUSTOM_PATTERN(custom_args);
+
+    RGBColor_t green = GREEN, blue = BLUE;
+
+    if (current_series_step == 1) {
+        args.start_color = green;
+        args.end_color = blue;
+    } else {
+        args.start_color = blue;
+        args.end_color = green;
+    }
+    return pattern;
+}
+static const SeriesArgs_t green_blue_fade_series = {
+    .total_series_steps_function = green_blue_fade_series_steps,
+    .get_pattern_for_step = green_blue_fade_series_patterns,
+};
+
+
 int main(void) {
     clock_prescale_set(clock_div_1);
     apa102_init_spi();
-
-
-
-
 
 
     const GenericPattern_t patterns[] = {
@@ -157,6 +218,7 @@ int main(void) {
         RIBBON_PATTERN(rainbow_ribbon),
         SERIES_PATTERN(rgb_spread_series),
         SERIES_PATTERN(rgb_rainbow_scroll_series),
+        SERIES_PATTERN(green_blue_fade_series),
     };
     const uint8_t pattern_count = (sizeof(patterns)) / (sizeof(patterns[0]));
 

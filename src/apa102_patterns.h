@@ -36,6 +36,7 @@ typedef enum PatternType {
     SCROLL = 3,
     WIDE_SCROLL = 4,
     SERIES = 5,
+    CUSTOM = 6,
 } PatternType_t;
 
 /* A Generic Pattern representing the union of all available PatternTypes &
@@ -54,6 +55,7 @@ typedef struct GenericPattern {
 #define SCROLL_PATTERN(pattern) { .pattern_type = SCROLL, PATTERN_ARGS(pattern) }
 #define WIDE_SCROLL_PATTERN(pattern) { .pattern_type = WIDE_SCROLL, PATTERN_ARGS(pattern) }
 #define SERIES_PATTERN(pattern) { .pattern_type = SERIES, PATTERN_ARGS(pattern) }
+#define CUSTOM_PATTERN(pattern) { .pattern_type = CUSTOM, PATTERN_ARGS(pattern) }
 
 
 
@@ -162,6 +164,17 @@ typedef struct SeriesArgs {
     // Generate the current pattern using the `current_series_step` global.
     GenericPattern_t (*get_pattern_for_step)(void);
 } SeriesArgs_t;
+
+// Custom User Patterns - set each step's color sequence yourself
+typedef struct CustomPatternArgs {
+    // Return the total number of steps in the pattern.
+    uint8_t (*step_count_function)(void *);
+    // Set the color sequence array using the `current_pattern_step` global.
+    uint16_t (*set_sequence_function)(RGBColor_t *, void *);
+    // Additional pattern-specific data passed to the above functions.
+    void *custom_data;
+} CustomPatternArgs_t;
+
 
 // Extend/Retract
 /* These effects assume the desired pattern_data is already initialized. They

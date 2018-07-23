@@ -2,6 +2,8 @@
 
 ## master
 
+* Add the `CUSTOM` pattern type. This allows defining patterns that use your
+  own `_step_count` & `_set_sequence` functions as well as arbitrary data.
 * Add the `rgbcolor_equal` function to the `apa102.h` module for determining
   whether the RGB values for two colors are equal.
 * Add the `SERIES` pattern type. This allows creating patterns that are
