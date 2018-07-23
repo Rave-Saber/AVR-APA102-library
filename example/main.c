@@ -4,6 +4,7 @@
 #include <apa102_simple_effects.h>
 #include <apa102_patterns.h>
 
+
 /* Base Colors */
 #define RED { 0x7f, 0x00, 0x00 }
 #define GREEN { 0x00, 0x7f, 0x00 }
@@ -13,13 +14,31 @@
 #define INDIGO { 0x25, 0x00, 0x41 }
 #define VIOLET { 0x4a, 0x00, 0x69 }
 
-/* Red->Green->Blue Sequence */
+
+/* Color Sequences */
 static const RGBColor_t rgb_sequence[3] =
     { RED, GREEN, BLUE };
 
-/* ROYGBIV Sequence */
 static const RGBColor_t rainbow_sequence[7] =
     { RED, ORANGE, YELLOW, GREEN, BLUE, INDIGO, VIOLET };
+
+
+/* Basic Patterns */
+static const SolidArgs_t solid_red =
+    RED;
+
+static const WideScrollArgs_t rainbow_wide_scroll =
+    { .sequence = rainbow_sequence, .length = 7, .delay = 200 };
+
+static const FlashArgs_t rainbow_flash =
+    { .sequence = rainbow_sequence, .length = 7, .color_delay = 250, .blank_delay = 125 };
+
+static const ScrollArgs_t rgb_scroll =
+    { .sequence = rgb_sequence, .length = 3, .reverse = false, .delay = 225 };
+
+static const RibbonArgs_t rainbow_ribbon =
+    { .sequence = rainbow_sequence, .length = 7, .delay = 200 };
+
 
 /* Series of Patterns */
 /* This series starts with a RGB flash, slowly decreases the blank time until
@@ -125,21 +144,10 @@ int main(void) {
     clock_prescale_set(clock_div_1);
     apa102_init_spi();
 
-    /* Patterns */
-    const SolidArgs_t solid_red =
-        RED;
 
-    const WideScrollArgs_t rainbow_wide_scroll =
-        { .sequence = rainbow_sequence, .length = 7, .delay = 200 };
 
-    const FlashArgs_t rainbow_flash =
-        { .sequence = rainbow_sequence, .length = 7, .color_delay = 250, .blank_delay = 125 };
 
-    const ScrollArgs_t rgb_scroll =
-        { .sequence = rgb_sequence, .length = 3, .reverse = false, .delay = 225 };
 
-    const RibbonArgs_t rainbow_ribbon =
-        { .sequence = rainbow_sequence, .length = 7, .delay = 200 };
 
     const GenericPattern_t patterns[] = {
         SOLID_PATTERN(solid_red),
