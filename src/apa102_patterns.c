@@ -3,6 +3,9 @@
 
 uint8_t current_pattern_step = 0;
 uint8_t total_pattern_steps = 0;
+bool playing_pattern_series = false;
+uint8_t total_series_steps = 0;
+uint8_t current_series_step = 0;
 
 // The current color sequence for the LED strip.
 static RGBColor_t current_sequence[LED_COUNT];
@@ -19,6 +22,7 @@ static inline void set_all(const RGBColor_t color);
 void initialize_pattern(const GenericPattern_t *pattern_data) {
     current_pattern_step = 0;
     const void *type_args = pattern_data->pattern_type_args;
+    playing_pattern_series = false;
     switch (pattern_data->pattern_type) {
         case SOLID: {
             total_pattern_steps = solid_step_count();
@@ -43,6 +47,13 @@ void initialize_pattern(const GenericPattern_t *pattern_data) {
             total_pattern_steps = wide_scroll_step_count();
             break;
         }
+        case SERIES: {
+            // total_pattern_steps initialized in update_sequence
+            total_series_steps = ((SeriesArgs_t *) type_args)->total_series_steps_function();
+            current_series_step = 0;
+            playing_pattern_series = true;
+            break;
+        }
     }
 }
 
@@ -65,6 +76,15 @@ uint16_t update_sequence(const GenericPattern_t *pattern_data) {
         case WIDE_SCROLL:
             delay = wide_scroll_set_sequence((WideScrollArgs_t *) type_args);
             break;
+        case SERIES: {
+            GenericPattern_t current_pattern = ((SeriesArgs_t *) type_args)->get_pattern_for_step();
+            if (current_pattern_step == 0) {
+                initialize_pattern(&current_pattern);
+                playing_pattern_series = true;
+            }
+            delay = update_sequence(&current_pattern);
+            break;
+        }
     }
     return delay;
 }
@@ -134,7 +154,6 @@ uint16_t scroll_set_sequence(const ScrollArgs_t *args) {
         uint8_t sequence_offset = i + current_pattern_step;
         if (!(args->reverse)) {
             sequence_offset = args->length - sequence_offset;
-        } else {
         }
         sequence_offset %= args->length;
         *(current_sequence + i) = *(args->sequence + sequence_offset);

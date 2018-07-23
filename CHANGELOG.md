@@ -2,6 +2,9 @@
 
 ## master
 
+* Add the `SERIES` pattern type. This allows creating patterns that are
+  sequences of other patterns. E.g., multiple flash patterns with decreasing
+  blank delays, or a scroll up followed by a scroll down.
 * Replace the extend/retract `_current_sequence` functions with
   `extend_pattern` & `retract_pattern` functions. These functions play the
   patterns while extending & retracting, instead of displaying a single

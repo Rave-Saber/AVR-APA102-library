@@ -10,6 +10,12 @@
 extern uint8_t total_pattern_steps;
 // The current step of the pattern the player is on.
 extern uint8_t current_pattern_step;
+// Are we playing a series of patterns?
+extern bool playing_pattern_series;
+// The total number of patterns the series has.
+extern uint8_t total_series_steps;
+// The current step of the pattern series the player is on.
+extern uint8_t current_series_step;
 
 // Delay for a variable amount of milliseconds
 static inline void variable_delay(uint16_t ms_delay) {
@@ -29,6 +35,7 @@ typedef enum PatternType {
     RIBBON = 2,
     SCROLL = 3,
     WIDE_SCROLL = 4,
+    SERIES = 5,
 } PatternType_t;
 
 /* A Generic Pattern representing the union of all available PatternTypes &
@@ -46,6 +53,7 @@ typedef struct GenericPattern {
 #define RIBBON_PATTERN(pattern) { .pattern_type = RIBBON, PATTERN_ARGS(pattern) }
 #define SCROLL_PATTERN(pattern) { .pattern_type = SCROLL, PATTERN_ARGS(pattern) }
 #define WIDE_SCROLL_PATTERN(pattern) { .pattern_type = WIDE_SCROLL, PATTERN_ARGS(pattern) }
+#define SERIES_PATTERN(pattern) { .pattern_type = SERIES, PATTERN_ARGS(pattern) }
 
 
 
@@ -63,9 +71,15 @@ uint16_t update_sequence(const GenericPattern_t *pattern_data);
 /* Output the `current_sequence` to the LEDs via SPI. */
 void output_current_sequence(void);
 
-/* Increment the `current_pattern_step` modulo the `total_pattern_steps`. */
+/* Increment the `current_pattern_step` modulo the `total_pattern_steps`. When
+ * playing a series of patterns, completing a pattern will increment the
+ * current pattern in the series.
+ */
 inline void increment_current_step(void) {
     current_pattern_step = (current_pattern_step + 1) % total_pattern_steps;
+    if (current_pattern_step == 0 && playing_pattern_series) {
+        current_series_step = (current_series_step + 1) % total_series_steps;
+    }
 }
 
 /* Update the Sequence, Output it, Delay, & Increment the step count */
@@ -136,6 +150,18 @@ typedef struct WideScrollArgs {
 } WideScrollArgs_t;
 uint8_t wide_scroll_step_count(void);
 uint16_t wide_scroll_set_sequence(const WideScrollArgs_t *args);
+
+// Series - play multiple patterns one after another
+// The player code assumes that `get_pattern_for_step` will never return a
+// `SERIES` pattern. Bad things may happen if you do this!
+// TODO: Could reduce computations by storing generated GenericPatterns while
+// playing them.
+typedef struct SeriesArgs {
+    // Return the total number of patterns in the series.
+    uint8_t (*total_series_steps_function)(void);
+    // Generate the current pattern using the `current_series_step` global.
+    GenericPattern_t (*get_pattern_for_step)(void);
+} SeriesArgs_t;
 
 // Extend/Retract
 /* These effects assume the desired pattern_data is already initialized. They

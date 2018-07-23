@@ -48,6 +48,10 @@ flash`.
 
 ## TODO
 
+* Allow nesting of `SERIES` patterns.
+    * Would make re-using sequence transitions easier
+    * Probably need to make series step globals into struct. Pause playback of
+      parent series while playing sub-series.
 * User-defined pattern functions via callbacks
 * Make `current_sequence` array in `apa102_patterns` available to library
   consumers? Either by exposing the array or functions to modify it.
