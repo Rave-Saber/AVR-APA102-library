@@ -2,6 +2,8 @@
 
 ## master
 
+* Add a `series_data` field to the `SeriesArgs` struct, allowing the user to
+  pass custom data to the step count & get pattern functions.
 * Add a `delay` field to the `SolidArgs` struct. This allows users to pause on
   a `SOLID` pattern when it's nested in a `SERIES` pattern.
 * Add the `CUSTOM` pattern type. This allows defining patterns that use your

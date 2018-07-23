@@ -49,7 +49,8 @@ void initialize_pattern(const GenericPattern_t *pattern_data) {
         }
         case SERIES: {
             // total_pattern_steps initialized in update_sequence
-            total_series_steps = ((SeriesArgs_t *) type_args)->total_series_steps_function();
+            SeriesArgs_t *args = (SeriesArgs_t *) type_args;
+            total_series_steps = args->total_series_steps_function(args->series_data);
             current_series_step = 0;
             playing_pattern_series = true;
             break;
@@ -82,7 +83,8 @@ uint16_t update_sequence(const GenericPattern_t *pattern_data) {
             delay = wide_scroll_set_sequence((WideScrollArgs_t *) type_args);
             break;
         case SERIES: {
-            GenericPattern_t current_pattern = ((SeriesArgs_t *) type_args)->get_pattern_for_step();
+            SeriesArgs_t *args = (SeriesArgs_t *) type_args;
+            GenericPattern_t current_pattern = args->get_pattern_for_step(args->series_data);
             if (current_pattern_step == 0) {
                 initialize_pattern(&current_pattern);
                 playing_pattern_series = true;

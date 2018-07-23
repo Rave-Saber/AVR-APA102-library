@@ -28,12 +28,6 @@ static const RGBColor_t rainbow_sequence[7] =
 static const SolidArgs_t solid_red =
     { .color = RED, .delay = 2000 };
 
-static const SolidArgs_t solid_green =
-    { .color = GREEN, .delay = 2000 };
-
-static const SolidArgs_t solid_blue =
-    { .color = BLUE, .delay = 2000 };
-
 static const WideScrollArgs_t rainbow_wide_scroll =
     { .sequence = rainbow_sequence, .length = 7, .delay = 200 };
 
@@ -52,10 +46,10 @@ static const RibbonArgs_t rainbow_ribbon =
  * it hits a ribbon pattern, which slowly grows the band width. The series
  * finishes by reversing - shrinking the ribbons and increasing the blank time.
  */
-uint8_t rgb_spread_series_steps(void) {
+uint8_t rgb_spread_series_steps(void *series_data) {
     return 10 + 20 + 10;
 }
-GenericPattern_t rgb_spread_series_patterns(void) {
+GenericPattern_t rgb_spread_series_patterns(void *series_data) {
     static FlashArgs_t flash_args =
         { .sequence = rgb_sequence, .length = 3, .color_delay = 200, .blank_delay = 200 };
     static RibbonArgs_t ribbon_args =
@@ -80,17 +74,18 @@ GenericPattern_t rgb_spread_series_patterns(void) {
 }
 static const SeriesArgs_t rgb_spread_series = {
     .total_series_steps_function = rgb_spread_series_steps,
-    .get_pattern_for_step = rgb_spread_series_patterns
+    .get_pattern_for_step = rgb_spread_series_patterns,
+    .series_data = NULL,
 };
 /* This series starts as an RGB wide scroll, slowly adding colors until it
  * becomes a Rainbow wide scroll, then slowly removing colors until it becomes
  * RGB again.
  */
 static RGBColor_t rgb_rainbow_sequence[7];
-uint8_t rgb_rainbow_scroll_steps(void) {
+uint8_t rgb_rainbow_scroll_steps(void *series_data) {
     return 8;
 }
-GenericPattern_t rgb_rainbow_scroll_patterns(void) {
+GenericPattern_t rgb_rainbow_scroll_patterns(void *series_data) {
     static WideScrollArgs_t args =
         { .delay = 120, .sequence = rgb_rainbow_sequence, .length = 7 };
     switch (current_series_step) {
@@ -143,7 +138,8 @@ GenericPattern_t rgb_rainbow_scroll_patterns(void) {
 }
 static const SeriesArgs_t rgb_rainbow_scroll_series = {
     .total_series_steps_function = rgb_rainbow_scroll_steps,
-    .get_pattern_for_step = rgb_rainbow_scroll_patterns
+    .get_pattern_for_step = rgb_rainbow_scroll_patterns,
+    .series_data = NULL,
 };
 
 
@@ -181,48 +177,56 @@ uint16_t random_color_fade_set_sequence(RGBColor_t *sequence, void *custom_data)
     return args->delay;
 }
 /* Make a SERIES pattern from the custom random fade pattern. */
-uint8_t green_blue_fade_series_steps(void) {
-    return 4;
+typedef struct RandomFadeSeriesArgs {
+    const RGBColor_t *sequence;
+    uint8_t length;
+    uint16_t solid_delay;
+    uint16_t fade_delay;
+} RandomFadeSeriesArgs_t;
+uint8_t random_fade_series_steps(void *series_data) {
+    RandomFadeSeriesArgs_t *args = (RandomFadeSeriesArgs_t *) series_data;
+    return 2 * args->length;
 }
-GenericPattern_t green_blue_fade_series_patterns(void) {
-    static RandomFadeArgs_t args =
-        { .delay = 35, .start_color = GREEN, .end_color = BLUE };
+GenericPattern_t random_fade_series_patterns(void *series_data) {
+    static SolidArgs_t solid_args;
+    static RandomFadeArgs_t fade_args;
     static const CustomPatternArgs_t custom_args = {
         .step_count_function = random_color_fade_step_count,
         .set_sequence_function = random_color_fade_set_sequence,
-        .custom_data = (void *) &args,
+        .custom_data = (void *) &fade_args,
     };
 
-    RGBColor_t green = GREEN, blue = BLUE;
+    RandomFadeSeriesArgs_t *series_args = (RandomFadeSeriesArgs_t *) series_data;
 
-    uint8_t color_step = current_series_step / 2;
-    uint8_t fade_step = current_series_step % 2;
+    uint8_t color_number = current_series_step / 2;
+    // color_step == 0 is solid, color_step == 1 is the fade to next color
+    uint8_t color_step = current_series_step % 2;
 
     if (color_step == 0) {
-        if (fade_step == 0) {
-            const GenericPattern_t pattern = SOLID_PATTERN(solid_green);
-            return pattern;
-        } else {
-            args.start_color = green;
-            args.end_color = blue;
-            const GenericPattern_t pattern = CUSTOM_PATTERN(custom_args);
-            return pattern;
-        }
+        solid_args.delay = series_args->solid_delay;
+        solid_args.color = *(series_args->sequence + color_number);
+        const GenericPattern_t pattern = SOLID_PATTERN(solid_args);
+        return pattern;
     } else {
-        if (fade_step == 0) {
-            const GenericPattern_t pattern = SOLID_PATTERN(solid_blue);
-            return pattern;
-        } else {
-            args.start_color = blue;
-            args.end_color = green;
-            const GenericPattern_t pattern = CUSTOM_PATTERN(custom_args);
-            return pattern;
-        }
+        fade_args.delay = series_args->fade_delay;
+        fade_args.start_color = *(series_args->sequence + color_number);
+        fade_args.end_color = color_number == (series_args->length - 1)
+            ? *(series_args->sequence)
+            : *(series_args->sequence + color_number + 1);
+        const GenericPattern_t pattern = CUSTOM_PATTERN(custom_args);
+        return pattern;
     }
 }
-static const SeriesArgs_t green_blue_fade_series = {
-    .total_series_steps_function = green_blue_fade_series_steps,
-    .get_pattern_for_step = green_blue_fade_series_patterns,
+RandomFadeSeriesArgs_t rgb_random_fade_args = {
+    .sequence = rgb_sequence,
+    .length = 3,
+    .solid_delay = 1500,
+    .fade_delay = 60,
+};
+static const SeriesArgs_t rgb_random_fade_series = {
+    .total_series_steps_function = random_fade_series_steps,
+    .get_pattern_for_step = random_fade_series_patterns,
+    .series_data = &rgb_random_fade_args,
 };
 
 
@@ -239,7 +243,7 @@ int main(void) {
         RIBBON_PATTERN(rainbow_ribbon),
         SERIES_PATTERN(rgb_spread_series),
         SERIES_PATTERN(rgb_rainbow_scroll_series),
-        SERIES_PATTERN(green_blue_fade_series),
+        SERIES_PATTERN(rgb_random_fade_series),
     };
     const uint8_t pattern_count = (sizeof(patterns)) / (sizeof(patterns[0]));
 

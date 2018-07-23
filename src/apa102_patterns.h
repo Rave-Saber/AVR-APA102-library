@@ -163,9 +163,11 @@ uint16_t wide_scroll_set_sequence(const WideScrollArgs_t *args);
 // playing them.
 typedef struct SeriesArgs {
     // Return the total number of patterns in the series.
-    uint8_t (*total_series_steps_function)(void);
+    uint8_t (*total_series_steps_function)(void *);
     // Generate the current pattern using the `current_series_step` global.
-    GenericPattern_t (*get_pattern_for_step)(void);
+    GenericPattern_t (*get_pattern_for_step)(void *);
+    // Additional pattern-specific data passed to the above functions.
+    void *series_data;
 } SeriesArgs_t;
 
 // Custom User Patterns - set each step's color sequence yourself
