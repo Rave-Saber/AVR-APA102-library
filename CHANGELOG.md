@@ -2,6 +2,8 @@
 
 ## master
 
+* Add the `rgbcolor_equal` function to the `apa102.h` module for determining
+  whether the RGB values for two colors are equal.
 * Add the `SERIES` pattern type. This allows creating patterns that are
   sequences of other patterns. E.g., multiple flash patterns with decreasing
   blank delays, or a scroll up followed by a scroll down.

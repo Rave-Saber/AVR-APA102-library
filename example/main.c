@@ -52,8 +52,10 @@ GenericPattern_t rgb_spread_series_patterns(void) {
         return current_pattern;
     }
 }
-static const SeriesArgs_t rgb_spread_series =
-    { .total_series_steps_function = rgb_spread_series_steps, .get_pattern_for_step = rgb_spread_series_patterns };
+static const SeriesArgs_t rgb_spread_series = {
+    .total_series_steps_function = rgb_spread_series_steps,
+    .get_pattern_for_step = rgb_spread_series_patterns
+};
 /* This series starts as an RGB wide scroll, slowly adding colors until it
  * becomes a Rainbow wide scroll, then slowly removing colors until it becomes
  * RGB again.
@@ -113,13 +115,15 @@ GenericPattern_t rgb_rainbow_scroll_patterns(void) {
     GenericPattern_t pattern = WIDE_SCROLL_PATTERN(args);
     return pattern;
 }
-static const SeriesArgs_t rgb_rainbow_scroll_series =
-    { .total_series_steps_function = rgb_rainbow_scroll_steps, .get_pattern_for_step = rgb_rainbow_scroll_patterns };
+static const SeriesArgs_t rgb_rainbow_scroll_series = {
+    .total_series_steps_function = rgb_rainbow_scroll_steps,
+    .get_pattern_for_step = rgb_rainbow_scroll_patterns
+};
 
 
 int main(void) {
-    apa102_init_spi();
     clock_prescale_set(clock_div_1);
+    apa102_init_spi();
 
     /* Patterns */
     const SolidArgs_t solid_red =

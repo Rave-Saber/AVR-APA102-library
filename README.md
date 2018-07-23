@@ -48,6 +48,9 @@ flash`.
 
 ## TODO
 
+* Allow specifying delay times for solid patterns - useful when a solid is
+  nested in a series pattern.
+* Allow passing user data to `SERIES` pattern arguments.
 * Allow nesting of `SERIES` patterns.
     * Would make re-using sequence transitions easier
     * Probably need to make series step globals into struct. Pause playback of

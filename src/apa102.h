@@ -2,6 +2,7 @@
 #define APA102_H
 
 #include <avr/io.h>
+#include <stdbool.h>
 
 
 #ifndef SCK_DDR
@@ -50,6 +51,11 @@ inline RGBColor_t rgb(const uint32_t color) {
     uint8_t blue = color & 0x0000ff;
     RGBColor_t c = { red, green, blue };
     return c;
+}
+
+/* Determine if two RGBColors are equal by value */
+inline bool rgbcolor_equal(const RGBColor_t *c1, const RGBColor_t *c2) {
+    return c1->red == c2->red && c1->green == c2->green && c1->blue == c2->blue;
 }
 
 /* Initialize Hardware SPI for the APA102 LEDs. This runs with a clock
