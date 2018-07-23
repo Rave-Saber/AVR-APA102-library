@@ -2,6 +2,8 @@
 
 ## master
 
+* Add a `delay` field to the `SolidArgs` struct. This allows users to pause on
+  a `SOLID` pattern when it's nested in a `SERIES` pattern.
 * Add the `CUSTOM` pattern type. This allows defining patterns that use your
   own `_step_count` & `_set_sequence` functions as well as arbitrary data.
 * Add the `rgbcolor_equal` function to the `apa102.h` module for determining

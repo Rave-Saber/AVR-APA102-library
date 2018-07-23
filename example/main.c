@@ -26,7 +26,13 @@ static const RGBColor_t rainbow_sequence[7] =
 
 /* Basic Patterns */
 static const SolidArgs_t solid_red =
-    RED;
+    { .color = RED, .delay = 2000 };
+
+static const SolidArgs_t solid_green =
+    { .color = GREEN, .delay = 2000 };
+
+static const SolidArgs_t solid_blue =
+    { .color = BLUE, .delay = 2000 };
 
 static const WideScrollArgs_t rainbow_wide_scroll =
     { .sequence = rainbow_sequence, .length = 7, .delay = 200 };
@@ -174,9 +180,9 @@ uint16_t random_color_fade_set_sequence(RGBColor_t *sequence, void *custom_data)
     }
     return args->delay;
 }
-/* Make a SERIES pattern for back to back fades */
+/* Make a SERIES pattern from the custom random fade pattern. */
 uint8_t green_blue_fade_series_steps(void) {
-    return 2;
+    return 4;
 }
 GenericPattern_t green_blue_fade_series_patterns(void) {
     static RandomFadeArgs_t args =
@@ -186,18 +192,33 @@ GenericPattern_t green_blue_fade_series_patterns(void) {
         .set_sequence_function = random_color_fade_set_sequence,
         .custom_data = (void *) &args,
     };
-    static const GenericPattern_t pattern = CUSTOM_PATTERN(custom_args);
 
     RGBColor_t green = GREEN, blue = BLUE;
 
-    if (current_series_step == 1) {
-        args.start_color = green;
-        args.end_color = blue;
+    uint8_t color_step = current_series_step / 2;
+    uint8_t fade_step = current_series_step % 2;
+
+    if (color_step == 0) {
+        if (fade_step == 0) {
+            const GenericPattern_t pattern = SOLID_PATTERN(solid_green);
+            return pattern;
+        } else {
+            args.start_color = green;
+            args.end_color = blue;
+            const GenericPattern_t pattern = CUSTOM_PATTERN(custom_args);
+            return pattern;
+        }
     } else {
-        args.start_color = blue;
-        args.end_color = green;
+        if (fade_step == 0) {
+            const GenericPattern_t pattern = SOLID_PATTERN(solid_blue);
+            return pattern;
+        } else {
+            args.start_color = blue;
+            args.end_color = green;
+            const GenericPattern_t pattern = CUSTOM_PATTERN(custom_args);
+            return pattern;
+        }
     }
-    return pattern;
 }
 static const SeriesArgs_t green_blue_fade_series = {
     .total_series_steps_function = green_blue_fade_series_steps,

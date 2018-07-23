@@ -109,7 +109,10 @@ static inline void run_step(const GenericPattern_t *pattern_data) {
  */
 
 // Solid Colors
-typedef RGBColor_t SolidArgs_t;
+typedef struct SolidArgs{
+    RGBColor_t color;
+    uint16_t delay;
+} SolidArgs_t;
 uint8_t solid_step_count(void);
 uint16_t solid_set_sequence(const SolidArgs_t *args);
 

@@ -54,14 +54,14 @@ flash`.
 
 ## TODO
 
-* Allow specifying delay times for solid patterns - useful when a solid is
-  nested in a series pattern.
+* Modify extension/retraction delay so it's only used for the LED
+  (de)activation rate - respect the pattern step's delay amount for stepping through
+  the pattern.
 * Allow passing user data to `SERIES` pattern arguments.
 * Allow nesting of `SERIES` patterns.
     * Would make re-using sequence transitions easier
     * Probably need to make series step globals into struct. Pause playback of
       parent series while playing sub-series.
-* User-defined pattern functions via callbacks
 * Make `current_sequence` array in `apa102_patterns` available to library
   consumers? Either by exposing the array or functions to modify it.
 * Support assigning different patterns to specific LED ranges
@@ -69,6 +69,9 @@ flash`.
     * Probably requires re-writing patterns module to calculate single LED
       colors based on both step count and LED index. Is that too performance
       intensive?
+    * Or pass the array pointer & led length to each pattern instead of using
+      the `current_sequence` & `LED_COUNT` globals. That would allow offsetting
+      & shrinking patterns.
 * LED powersaving - light only every Xth LED, or set a maximum current the LEDs
   can use & use that to scale LED duty cycles.
 * Color mixing/blending, building gradients between sequence of colors.

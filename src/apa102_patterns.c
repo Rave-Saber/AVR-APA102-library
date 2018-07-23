@@ -121,8 +121,8 @@ uint8_t solid_step_count(void) {
     return 1;
 }
 uint16_t solid_set_sequence(const SolidArgs_t *args) {
-    set_all(*args);
-    return 0;
+    set_all(args->color);
+    return args->delay;
 }
 
 
