@@ -75,9 +75,9 @@ flash`.
   can use & use that to scale LED duty cycles.
 * Color mixing/blending, building gradients between sequence of colors.
 * More effects!
-    * scrolling effect that widens or fades the color bands instead of repeating them
+    * scrolling effect that fades the color bands instead of repeating them
     * fixed number of scrolling bands
-    * static repeating bands with fixed width or count.
+    * static repeating bands with fixed width or count - ribbon & flash
 * Add an RGBAColor type that uses the alpha level to scale the RGB channels
   instead of the APA102's "brightness" bits(since those introduce stuttering).
 
