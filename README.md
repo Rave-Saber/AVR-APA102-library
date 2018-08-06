@@ -1,5 +1,7 @@
 # AVR APA102 Library
 
+[![Build Status](https://travis-ci.org/Rave-Saber/AVR-APA102-library.svg?branch=master)](https://travis-ci.org/Rave-Saber/AVR-APA102-library)
+
 This is a simple C library for driving a strip of APA102 LEDs using the
 hardware SPI on an AVR microcontroller.
 
