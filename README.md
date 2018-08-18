@@ -56,13 +56,26 @@ flash`.
 
 ## TODO
 
+* Use timer for delays instead of relying on delay functions?
+    * Make it a compilation option in case no free timers? Or method that can
+      re-use existing timer with different interrupt/ms rates.
+    * Maybe just implement in firmware & example and have library continue to
+      return delay amounts.
 * Modify extension/retraction delay so it's only used for the LED
-  (de)activation rate - respect the pattern step's delay amount for stepping through
-  the pattern.
+  (de)activation rate - respect the pattern step's delay amount for stepping
+  through the pattern.
 * Allow nesting of `SERIES` patterns.
     * Would make re-using sequence transitions easier
     * Probably need to make series step globals into struct. Pause playback of
       parent series while playing sub-series.
+    * Dynamic array to track all series/sub-series structs up to current depth?
+* Pattern for rendering images
+    * Make a pattern for fixed arrays of colors
+    * Convert images to xpm, transpose rows/cols, & include in patterns file.
+* Pattern for rendering text
+    * Need to scale font to `LED_COUNT`
+    * Option for setting foreground/background colors, maybe color
+      sequences or a background `GenericPattern`
 * Make `current_sequence` array in `apa102_patterns` available to library
   consumers? Either by exposing the array or functions to modify it.
 * Support assigning different patterns to specific LED ranges
@@ -73,6 +86,7 @@ flash`.
     * Or pass the array pointer & led length to each pattern instead of using
       the `current_sequence` & `LED_COUNT` globals. That would allow offsetting
       & shrinking patterns.
+    * How to handle patterns with different step counts & delays?
 * LED powersaving - light only every Xth LED, or set a maximum current the LEDs
   can use & use that to scale LED duty cycles.
 * Color mixing/blending, building gradients between sequence of colors.
