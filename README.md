@@ -40,18 +40,26 @@ You need to define some macro's to use this library:
 The pin defines should be for the HW SPI pins of your AVR microcontroller. This
 library does not support using arbitrary I/O pins.
 
-You can optionally define `STARTING_LED` macro to shift the first lit LED down
-the strip. You should have at least `LED_COUNT + STARTING_LED - 1` LEDs in your
-strip.
-
 Then just include the `src` folder in your compilation process:
 
     avr-gcc -I /path/to/this/repo/src ...
 
-You can check out the example code which has been tested with a Sparkfun
-Lumenati 8-LED strip & an Atmel ATmega168a microcontroller. To build the hex
-file, run `make`. To build & flash the code using a `USBtinyISP`, run `make
-flash`.
+You can check out the example code which has been tested with both a Sparkfun
+Lumenati 8-LED strip & DotStar 144 LED/m strip using an Atmel ATmega168a
+microcontroller. To build the hex file, run `make all`. To build & flash the
+code using a `USBtinyISP`, run `make flash`.
+
+
+## Additional Features
+
+There are several optional features that can be enabled by defining macros.
+
+Define the `STARTING_LED` macro to shift the first lit LED down the strip. You
+should have at least `LED_COUNT + STARTING_LED - 1` LEDs in your strip.
+
+Define the `CURRENT_LIMIT` macro to limit the amount of current used by the
+strip. This exposes scaling functions in `apa102.h` and causes the simple
+effects & patterns modules to automatically scale any colors passed to them.
 
 
 ## TODO

@@ -1,10 +1,16 @@
 # The number of LED you want to light up
-LED_COUNT = 8
+LED_COUNT = 144
 
 # Uncomment this to shift the first lit LED further down the strip.
 # Your strip should have at least (STARTING_LED + LED_COUNT - 1) LEDs.
 #STARTING_LED = 137
 
+# Uncomment this to limit the amount of current used by the strip by scaling
+# the LED duty cycles. In miliamperes.
+CURRENT_LIMIT = 1000
+
+# If you're using an external oscillator, change this to your clock frequency.
+F_CPU = 8000000UL
 
 # ATmega168a PDIP-28
 MCU = atmega168
@@ -17,8 +23,6 @@ SS_PORT = PORTB
 SCK = PB5
 SCK_DDR = DDRB
 
-
-F_CPU = 8000000UL
 
 PROGRAMMER = usbtiny
 
@@ -45,6 +49,13 @@ CPPFLAGS += -DSCK=$(SCK) -DSCK_DDR=$(SCK_DDR)
 CPPFLAGS += -DLED_COUNT=$(LED_COUNT)
 ifdef STARTING_LED
 CPPFLAGS += -DSTARTING_LED=$(STARTING_LED)
+endif
+
+ifdef CURRENT_LIMIT
+CURRENT_PER_LED = $$(( $(CURRENT_LIMIT) / $(LED_COUNT) ))
+ifeq ($(shell test $(CURRENT_PER_LED) -lt 60; echo $$?), 0)
+CPPFLAGS += -DCURRENT_PER_LED=$(CURRENT_PER_LED)UL
+endif
 endif
 
 CFLAGS  = -Os -g -std=gnu99 -Wall

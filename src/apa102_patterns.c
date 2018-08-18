@@ -15,6 +15,9 @@ extern inline void increment_current_step(void);
 extern inline void run_step(const GenericPattern_t *pattern_data);
 
 static inline void set_all(const RGBColor_t color);
+#ifdef CURRENT_PER_LED
+static inline void scale_current_sequence(void);
+#endif
 
 
 /* Pattern Playback */
@@ -98,6 +101,9 @@ uint16_t update_sequence(const GenericPattern_t *pattern_data) {
             break;
         }
     }
+#ifdef CURRENT_PER_LED
+    scale_current_sequence();
+#endif
     return delay;
 }
 
@@ -252,9 +258,21 @@ void retract_pattern(const GenericPattern_t *pattern_data, uint16_t delay) {
 
 
 /* Helper Functions */
+
 // Set all the LEDs to the given color.
 static inline void set_all(const RGBColor_t color) {
     for (uint8_t i = 0; i < LED_COUNT; i++) {
         *(current_sequence + i) = color;
     }
 }
+
+#ifdef CURRENT_PER_LED
+/* Scale down any LEDs in the `current_sequence` that exceed the milliamps per
+ * LED limit.
+ */
+static inline void scale_current_sequence(void) {
+    for (uint8_t i = 0; i < LED_COUNT; i++) {
+        scale_color(current_sequence + i);
+    }
+}
+#endif

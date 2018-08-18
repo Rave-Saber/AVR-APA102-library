@@ -13,3 +13,7 @@ const RGBColor_t BLANK_LED = { 0x00, 0x00, 0x00 };
 extern inline void shift_starting_led(void);
 #endif
 extern inline void apa102_set_all_leds(const RGBColor_t color);
+#ifdef CURRENT_PER_LED
+extern inline uint8_t scale_channel(uint16_t value, uint8_t led_draw);
+extern inline void scale_color(RGBColor_t *color);
+#endif

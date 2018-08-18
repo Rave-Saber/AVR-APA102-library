@@ -2,6 +2,11 @@
 
 ## master
 
+* Add an optional `CURRENT_PER_LED` macro. Defining this will scale colors used
+  with the `simple_effects` & `patterns` modules if they surpass the current
+  limit, assuming linear current draw at a maximum of 60mA per LED.  The
+  example's Makefile shows how to implement a current limit for the entire
+  strip.
 * Add a `series_data` field to the `SeriesArgs` struct, allowing the user to
   pass custom data to the step count & get pattern functions.
 * Add a `delay` field to the `SolidArgs` struct. This allows users to pause on

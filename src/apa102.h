@@ -148,5 +148,30 @@ inline void apa102_set_all_leds(const RGBColor_t color) {
     apa102_end();
 }
 
+#ifdef CURRENT_PER_LED
+/* Scale Down a Single R, G, or B Channel for an LED given the LED's total
+ * current draw.
+ */
+inline uint8_t scale_channel(uint16_t value, uint8_t led_draw) {
+    return value * CURRENT_PER_LED / led_draw;
+}
+/* Scale Down an RGB color if it exceeds the milliamp limit. */
+inline void scale_color(RGBColor_t *color) {
+    // Assuming linear current draw w/ 60mA max per LED
+    uint8_t current_draw =
+        (((uint16_t) color->red * 20) / 255) +
+        (((uint16_t) color->green * 20) / 255) +
+        (((uint16_t) color->blue * 20) / 255)
+        ;
+
+    if (current_draw > CURRENT_PER_LED) {
+        // scaled channel = (limit / draw * value)
+        color->red = scale_channel(color->red, current_draw);
+        color->green = scale_channel(color->green, current_draw);
+        color->blue = scale_channel(color->blue, current_draw);
+    }
+}
+#endif
+
 
 #endif
