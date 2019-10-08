@@ -1,4 +1,5 @@
 ---
+
 # Travis builds are run in Arch Linux docker containers so we have access to
 # gcc8: https://github.com/mikkeloscar/arch-travis
 sudo: required
@@ -6,7 +7,7 @@ sudo: required
 services:
     - docker
 
-arch:
+archlinux:
     packages:
         - avr-binutils
         - avr-gcc
