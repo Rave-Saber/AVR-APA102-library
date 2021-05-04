@@ -2,6 +2,13 @@
 
 ## master
 
+
+## v2.0.0
+
+Rename the `apa102_effects.h` to `apa102_simple_effects.h` & add a new
+`apa102_patterns.h` module. This module adds support for additional &
+extensible pattern types.
+
 * Add an optional `CURRENT_PER_LED` macro. Defining this will scale colors used
   with the `simple_effects` & `patterns` modules if they surpass the current
   limit, assuming linear current draw at a maximum of 60mA per LED.  The
