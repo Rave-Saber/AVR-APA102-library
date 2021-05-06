@@ -64,6 +64,14 @@ effects & patterns modules to automatically scale any colors passed to them.
 
 ## TODO
 
+* Change extension/retraction pattern functions so we can specify the number of
+  LEDs to switch on/off in one cycle. E.g., switching 2 LEDs on at a time may
+  give us the same effect as 1 LED, but twice as fast.
+* Pattern for rendering images
+    * Make a pattern for fixed arrays of colors
+    * Script to convert images to xpm, transpose rows/cols, & print array for
+      inclusion in patterns file.
+* Color mixing/blending, building gradients between sequence of colors.
 * Use timer for delays instead of relying on delay functions?
     * Make it a compilation option in case no free timers? Or method that can
       re-use existing timer with different interrupt/ms rates.
@@ -71,15 +79,13 @@ effects & patterns modules to automatically scale any colors passed to them.
       return delay amounts.
 * Modify extension/retraction delay so it's only used for the LED
   (de)activation rate - respect the pattern step's delay amount for stepping
-  through the pattern.
+  through the pattern. I.e., blade size changes with extension delay, colors
+  change with pattern delay.
 * Allow nesting of `SERIES` patterns.
     * Would make re-using sequence transitions easier
     * Probably need to make series step globals into struct. Pause playback of
       parent series while playing sub-series.
     * Dynamic array to track all series/sub-series structs up to current depth?
-* Pattern for rendering images
-    * Make a pattern for fixed arrays of colors
-    * Convert images to xpm, transpose rows/cols, & include in patterns file.
 * Pattern for rendering text
     * Need to scale font to `LED_COUNT`
     * Option for setting foreground/background colors, maybe color
@@ -95,9 +101,6 @@ effects & patterns modules to automatically scale any colors passed to them.
       the `current_sequence` & `LED_COUNT` globals. That would allow offsetting
       & shrinking patterns.
     * How to handle patterns with different step counts & delays?
-* LED powersaving - light only every Xth LED, or set a maximum current the LEDs
-  can use & use that to scale LED duty cycles.
-* Color mixing/blending, building gradients between sequence of colors.
 * More effects!
     * scrolling effect that fades the color bands instead of repeating them
     * fixed number of scrolling bands
