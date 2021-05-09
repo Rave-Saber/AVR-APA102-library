@@ -29,13 +29,13 @@ static const SolidArgs_t solid_red =
     { .color = RED, .delay = 2000 };
 
 static const WideScrollArgs_t rainbow_wide_scroll =
-    { .sequence = rainbow_sequence, .length = 7, .delay = 200 };
+    { .sequence = rainbow_sequence, .length = 7, .direction = UP, .delay = 200 };
 
 static const FlashArgs_t rainbow_flash =
     { .sequence = rainbow_sequence, .length = 7, .color_delay = 250, .blank_delay = 125 };
 
 static const ScrollArgs_t rgb_scroll =
-    { .sequence = rgb_sequence, .length = 3, .reverse = false, .delay = 225 };
+    { .sequence = rgb_sequence, .length = 3, .direction = UP, .delay = 225 };
 
 static const RibbonArgs_t rainbow_ribbon =
     { .sequence = rainbow_sequence, .length = 7, .delay = 200 };

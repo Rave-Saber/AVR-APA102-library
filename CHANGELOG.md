@@ -2,6 +2,10 @@
 
 ## master
 
+* Add a `Direction` enum with `UP` & `DOWN` values and add `direction` fields
+  to the `ScrollArgs` & `WideScrollArgs` structs. This it easier to determine
+  the direction compared to `ScrollArgs` `reverse` field.
+
 
 ## v2.0.0
 

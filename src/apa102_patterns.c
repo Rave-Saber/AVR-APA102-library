@@ -169,9 +169,11 @@ uint8_t scroll_step_count(const uint8_t sequence_len) {
 
 uint16_t scroll_set_sequence(const ScrollArgs_t *args) {
     for (uint8_t i = 0; i < LED_COUNT; i++) {
-        uint8_t sequence_offset = i + current_pattern_step;
-        if (!(args->reverse)) {
-            sequence_offset = args->length - sequence_offset;
+        uint8_t sequence_offset = i;
+        if (args->direction == DOWN) {
+            sequence_offset += current_pattern_step;
+        } else {
+            sequence_offset += args->length - current_pattern_step;
         }
         sequence_offset %= args->length;
         *(current_sequence + i) = *(args->sequence + sequence_offset);
@@ -201,7 +203,13 @@ uint16_t wide_scroll_set_sequence(const WideScrollArgs_t *args) {
             width = short_band_width;
         }
         for (uint8_t band_led = 0; band_led < width; band_led++) {
-            uint8_t led_offset = (band_start + band_led + current_pattern_step) % LED_COUNT;
+            uint16_t led_offset = band_start + band_led;
+            if (args->direction == UP) {
+                led_offset += current_pattern_step;
+            } else {
+                led_offset += LED_COUNT - current_pattern_step;
+            }
+            led_offset %= LED_COUNT;
             *(current_sequence + led_offset) = *(args->sequence + band);
         }
     }

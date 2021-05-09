@@ -28,6 +28,15 @@ static inline void variable_delay(uint16_t ms_delay) {
 
 /* Pattern Playback */
 
+/* Directions for moving colors along the strip.
+ *
+ * `UP` means towards the last LED, `DOWN` means towards the first LED.
+ */
+typedef enum Direction {
+    UP = 0,
+    DOWN = 1,
+} Direction_t;
+
 /* The different pattern types available. */
 typedef enum PatternType {
     SOLID = 0,
@@ -136,21 +145,20 @@ uint8_t ribbon_step_count(const uint8_t sequence_len);
 uint16_t ribbon_set_sequence(const RibbonArgs_t *args);
 
 // Scroll - move sequence up/down strip - repeating if shorter than LED count
-// TODO: Change `reverse` to ScrollDirection enum - ScrollDown/ScrollUp
 typedef struct ScrollArgs {
     const RGBColor_t *sequence;
     uint8_t length;
-    bool reverse;
+    Direction_t direction;
     uint16_t delay;
 } ScrollArgs_t;
 uint8_t scroll_step_count(const uint8_t sequence_len);
 uint16_t scroll_set_sequence(const ScrollArgs_t *args);
 
 // Wide Scroll - extend color bands instead of repeating
-// TODO: Add ScrollDirection
 typedef struct WideScrollArgs {
     const RGBColor_t *sequence;
     uint8_t length;
+    Direction_t direction;
     uint16_t delay;
 } WideScrollArgs_t;
 uint8_t wide_scroll_step_count(void);
