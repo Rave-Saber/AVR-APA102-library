@@ -7,10 +7,10 @@ LED_COUNT = 144
 
 # Uncomment this to limit the amount of current used by the strip by scaling
 # the LED duty cycles. In miliamperes.
-CURRENT_LIMIT = 1000
+CURRENT_LIMIT = 1250
 
 # If you're using an external oscillator, change this to your clock frequency.
-F_CPU = 8000000UL
+F_CPU = 20000000UL
 
 # ATmega168a PDIP-28
 MCU = atmega168
@@ -46,7 +46,8 @@ CPPFLAGS += -DF_CPU=$(F_CPU)
 CPPFLAGS += -DMOSI=$(MOSI) -DMOSI_DDR=$(MOSI_DDR) -DMOSI_PORT=$(MOSI_PORT)
 CPPFLAGS += -DSS=$(SS) -DSS_DDR=$(SS_DDR) -DSS_PORT=$(SS_PORT)
 CPPFLAGS += -DSCK=$(SCK) -DSCK_DDR=$(SCK_DDR)
-CPPFLAGS += -DLED_COUNT=$(LED_COUNT)
+CPPFLAGS += -DLED_COUNT=$(LED_COUNT)U
+
 ifdef STARTING_LED
 CPPFLAGS += -DSTARTING_LED=$(STARTING_LED)
 endif
@@ -61,6 +62,11 @@ endif
 CFLAGS  = -Os -g -std=gnu99 -Wall
 CFLAGS += -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums
 CFLAGS += -ffunction-sections -fdata-sections
+CFLAGS += -Wno-unused-parameter -Wfloat-equal -Wundef -Wshadow
+CFLAGS += -Wpointer-arith -Wcast-align -Wstrict-prototypes
+CFLAGS += -Wstrict-overflow=5 -Wwrite-strings
+CFLAGS += -Wswitch-enum -Wunreachable-code -Wformat=2
+CFLAGS += -Winit-self
 
 LDFLAGS  = -Wl,-Map,$(TARGET).map
 LDFLAGS += -Wl,--gc-sections
