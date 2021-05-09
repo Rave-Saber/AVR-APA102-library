@@ -194,9 +194,12 @@ typedef struct CustomPatternArgs {
  * will increase/reduce the amount of LEDs shown while playing the given
  * pattern. The pattern's delay is ignored and the delay argument is used
  * instead - this allows faster extension/retraction with slow patterns.
+ *
+ * The level_step argument controls have many LEDs are turned on/off for each
+ * step of the effect.
  */
-void extend_pattern(const GenericPattern_t *pattern_data, const uint16_t delay);
-void retract_pattern(const GenericPattern_t *pattern_data, const uint16_t delay);
+void extend_pattern(const GenericPattern_t *pattern_data, const uint8_t level_step, const uint16_t delay);
+void retract_pattern(const GenericPattern_t *pattern_data, const uint8_t level_step, uint16_t delay);
 
 
 #endif

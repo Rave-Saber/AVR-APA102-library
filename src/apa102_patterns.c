@@ -219,9 +219,9 @@ uint16_t wide_scroll_set_sequence(const WideScrollArgs_t *args) {
 
 /* EXTEND & RETRACT */
 // extend/retract output directly to hardware SPI
-void extend_pattern(const GenericPattern_t *pattern_data, uint16_t delay) {
+void extend_pattern(const GenericPattern_t *pattern_data, const uint8_t level_step, const uint16_t delay) {
     uint8_t current_level = 0;
-    while (current_level <= LED_COUNT) {
+    while (current_level <= LED_COUNT + level_step - 1) {
         update_sequence(pattern_data);
         apa102_start();
 #ifdef STARTING_LED
@@ -236,12 +236,12 @@ void extend_pattern(const GenericPattern_t *pattern_data, uint16_t delay) {
         }
         apa102_end();
         variable_delay(delay);
-        current_level++;
+        current_level += level_step;
         increment_current_step();
     }
 }
 
-void retract_pattern(const GenericPattern_t *pattern_data, uint16_t delay) {
+void retract_pattern(const GenericPattern_t *pattern_data, const uint8_t level_step, const uint16_t delay) {
     uint8_t current_level = LED_COUNT;
     while (current_level != 255) {
         update_sequence(pattern_data);
@@ -258,7 +258,16 @@ void retract_pattern(const GenericPattern_t *pattern_data, uint16_t delay) {
         }
         apa102_end();
         variable_delay(delay);
-        current_level--;
+        if (current_level == 0) {
+            current_level = 255;
+        } else {
+            if (current_level < level_step) {
+                current_level = 0;
+            } else {
+                current_level -= level_step;
+            }
+
+        }
         increment_current_step();
     }
 }

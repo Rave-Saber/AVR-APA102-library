@@ -64,9 +64,6 @@ effects & patterns modules to automatically scale any colors passed to them.
 
 ## TODO
 
-* Change extension/retraction pattern functions so we can specify the number of
-  LEDs to switch on/off in one cycle. E.g., switching 2 LEDs on at a time may
-  give us the same effect as 1 LED, but twice as fast.
 * Pattern for rendering images
     * Make a pattern for fixed arrays of colors
     * Script to convert images to xpm, transpose rows/cols, & print array for

@@ -87,7 +87,7 @@ uint8_t rgb_rainbow_scroll_steps(void *series_data) {
 }
 GenericPattern_t rgb_rainbow_scroll_patterns(void *series_data) {
     static WideScrollArgs_t args =
-        { .delay = 120, .sequence = rgb_rainbow_sequence, .length = 7 };
+        { .delay = 250, .sequence = rgb_rainbow_sequence, .direction = UP, .length = 7 };
     switch (current_series_step) {
         case 0:
             rgb_rainbow_sequence[0] = (RGBColor_t) RED;
@@ -268,7 +268,7 @@ int main(void) {
 
         /* Patterns */
         initialize_pattern(patterns);
-        extend_pattern(patterns, 500);
+        extend_pattern(patterns, 5, 500);
         for (uint8_t pattern_index = 0; pattern_index < pattern_count; pattern_index++) {
             if (pattern_index != 0) {
                 initialize_pattern(patterns + pattern_index);
@@ -294,7 +294,7 @@ int main(void) {
                 }
             }
         }
-        retract_pattern(patterns + pattern_count - 1, 500);
+        retract_pattern(patterns + pattern_count - 1, 5, 500);
 
 
         _delay_ms(500);

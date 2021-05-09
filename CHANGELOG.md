@@ -2,6 +2,11 @@
 
 ## master
 
+* Modify the `extend_pattern` and `retract_pattern` functions so they take a
+  `level_step` argument which controls the number of LEDs to flip on/off for
+  each step of the pattern. This allows faster sequences in exchange for less
+  precise effects. With adequate diffusion or a low delay, turning on 1 LED at
+  a time is unnecessary.
 * Add a `Direction` enum with `UP` & `DOWN` values and add `direction` fields
   to the `ScrollArgs` & `WideScrollArgs` structs. This it easier to determine
   the direction compared to `ScrollArgs` `reverse` field.
@@ -15,7 +20,7 @@ extensible pattern types.
 
 * Add an optional `CURRENT_PER_LED` macro. Defining this will scale colors used
   with the `simple_effects` & `patterns` modules if they surpass the current
-  limit, assuming linear current draw at a maximum of 60mA per LED.  The
+  limit, assuming linear current draw at a maximum of 60mA per LED. The
   example's Makefile shows how to implement a current limit for the entire
   strip.
 * Add a `series_data` field to the `SeriesArgs` struct, allowing the user to
