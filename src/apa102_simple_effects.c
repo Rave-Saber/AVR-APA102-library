@@ -75,7 +75,7 @@ void extend(const RGBColor_t color, const uint16_t delay) {
 #ifdef STARTING_LED
         shift_starting_led();
 #endif
-        for (uint8_t led = 0; led < LED_COUNT; led++) {
+        for (uint16_t led = 0; led < LED_COUNT; led++) {
             if (led + 1 <= current_level) {
                 set_led(&color);
             } else {
@@ -95,7 +95,7 @@ void retract(const RGBColor_t color, const uint16_t delay) {
 #ifdef STARTING_LED
         shift_starting_led();
 #endif
-        for (uint8_t led = 0; led < LED_COUNT; led++) {
+        for (uint16_t led = 0; led < LED_COUNT; led++) {
             if ((led + 1) <= current_level) {
                 set_led(&color);
             } else {

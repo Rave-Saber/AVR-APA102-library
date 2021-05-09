@@ -227,7 +227,7 @@ void extend_pattern(const GenericPattern_t *pattern_data, const uint8_t level_st
 #ifdef STARTING_LED
         shift_starting_led();
 #endif
-        for (uint8_t i = 0; i < LED_COUNT; i++) {
+        for (uint16_t i = 0; i < LED_COUNT; i++) {
             if (i + 1 <= current_level) {
                 apa102_set_led(*(current_sequence + i));
             } else {
@@ -249,7 +249,7 @@ void retract_pattern(const GenericPattern_t *pattern_data, const uint8_t level_s
 #ifdef STARTING_LED
         shift_starting_led();
 #endif
-        for (uint8_t i = 0; i < LED_COUNT; i++) {
+        for (uint16_t i = 0; i < LED_COUNT; i++) {
             if (i + 1 <= current_level) {
                 apa102_set_led(*(current_sequence + i));
             } else {
