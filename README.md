@@ -106,6 +106,11 @@ effects & patterns modules to automatically scale any colors passed to them.
   instead of the APA102's "brightness" bits(since those introduce stuttering).
 
 
-# License
+## References
+
+* [Understanding the APA102 "Superled"](https://cpldcpu.wordpress.com/2014/11/30/understanding-the-apa102-superled/)
+
+
+## License
 
 GPL-3.0
