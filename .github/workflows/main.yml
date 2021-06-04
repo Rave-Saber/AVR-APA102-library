@@ -1,0 +1,23 @@
+---
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+  schedule:
+    - cron: '0 0 * * *'
+  pull_request:
+  create:
+  workflow_dispatch:
+
+jobs:
+  container:
+    container: lpodkalicki/avr-toolchain
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Make Example Code
+        run: |
+          cd example
+          make
