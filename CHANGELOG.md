@@ -2,6 +2,9 @@
 
 ## master
 
+* Add `GRADIENT` & `GRADIENT_BANDS` patterns. Gradient blends between a
+  sequence of colors. Gradient bands does the same but with a band for each
+  color.
 * Modify the `extend_pattern` and `retract_pattern` functions so they take a
   `level_step` argument which controls the number of LEDs to flip on/off for
   each step of the pattern. This allows faster sequences in exchange for less

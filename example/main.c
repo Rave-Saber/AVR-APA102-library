@@ -40,6 +40,15 @@ static const ScrollArgs_t rgb_scroll =
 static const RibbonArgs_t rainbow_ribbon =
     { .sequence = rainbow_sequence, .length = 7, .delay = 200 };
 
+static const GradientArgs_t rgb_gradient =
+    { .sequence = rgb_sequence, .length = 3, .steps = 50, .color_delay = 3000, .step_delay = 10 };
+
+static const GradientArgs_t rainbow_gradient =
+    { .sequence = rainbow_sequence, .length = 7, .steps = 10, .color_delay = 250, .step_delay = 1 };
+
+static const GradientBandsArgs_t rainbow_gradient_bands =
+    { .sequence = rainbow_sequence, .length = 7, .steps = 25, .color_delay = 250, .step_delay = 5 };
+
 
 /* Series of Patterns */
 /* This series starts with a RGB flash, slowly decreases the blank time until
@@ -241,6 +250,9 @@ int main(void) {
         FLASH_PATTERN(rainbow_flash),
         SCROLL_PATTERN(rgb_scroll),
         RIBBON_PATTERN(rainbow_ribbon),
+        GRADIENT_PATTERN(rgb_gradient),
+        GRADIENT_PATTERN(rainbow_gradient),
+        GRADIENT_BANDS_PATTERN(rainbow_gradient_bands),
         SERIES_PATTERN(rgb_spread_series),
         SERIES_PATTERN(rgb_rainbow_scroll_series),
         SERIES_PATTERN(rgb_random_fade_series),

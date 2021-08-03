@@ -44,8 +44,10 @@ typedef enum PatternType {
     RIBBON = 2,
     SCROLL = 3,
     WIDE_SCROLL = 4,
-    SERIES = 5,
-    CUSTOM = 6,
+    GRADIENT = 5,
+    GRADIENT_BANDS = 6,
+    SERIES = 97,
+    CUSTOM = 99,
 } PatternType_t;
 
 /* A Generic Pattern representing the union of all available PatternTypes &
@@ -63,6 +65,8 @@ typedef struct GenericPattern {
 #define RIBBON_PATTERN(pattern) { .pattern_type = RIBBON, PATTERN_ARGS(pattern) }
 #define SCROLL_PATTERN(pattern) { .pattern_type = SCROLL, PATTERN_ARGS(pattern) }
 #define WIDE_SCROLL_PATTERN(pattern) { .pattern_type = WIDE_SCROLL, PATTERN_ARGS(pattern) }
+#define GRADIENT_PATTERN(pattern) { .pattern_type = GRADIENT, PATTERN_ARGS(pattern) }
+#define GRADIENT_BANDS_PATTERN(pattern) { .pattern_type = GRADIENT_BANDS, PATTERN_ARGS(pattern) }
 #define SERIES_PATTERN(pattern) { .pattern_type = SERIES, PATTERN_ARGS(pattern) }
 #define CUSTOM_PATTERN(pattern) { .pattern_type = CUSTOM, PATTERN_ARGS(pattern) }
 
@@ -163,6 +167,36 @@ typedef struct WideScrollArgs {
 } WideScrollArgs_t;
 uint8_t wide_scroll_step_count(void);
 uint16_t wide_scroll_set_sequence(const WideScrollArgs_t *args);
+
+// Gradient - fade between a sequence of colors
+typedef struct GradientArgs {
+    // The colors
+    const RGBColor_t *sequence;
+    uint8_t length;
+    // The steps between each color
+    uint8_t steps;
+    // The length of time to wait at a sequence color
+    uint16_t color_delay;
+    // The length of time to wait at a gradient step
+    uint16_t step_delay;
+} GradientArgs_t;
+uint8_t gradient_step_count(const uint8_t sequence_len, const uint8_t gradient_steps);
+uint16_t gradient_set_sequence(const GradientArgs_t *args);
+
+// Gradient Bands - wide bands that fade between colors
+typedef struct GradientBandsArgs {
+    // The colors
+    const RGBColor_t *sequence;
+    uint8_t length;
+    // The number of steps between each color
+    uint8_t steps;
+    // The length of time to wait at a sequence color
+    uint16_t color_delay;
+    // The length of time to wait at a gradient step
+    uint16_t step_delay;
+} GradientBandsArgs_t;
+uint8_t gradient_bands_step_count(const GradientBandsArgs_t *args);
+uint16_t gradient_bands_set_sequence(const GradientBandsArgs_t *args);
 
 // Series - play multiple patterns one after another
 // The player code assumes that `get_pattern_for_step` will never return a

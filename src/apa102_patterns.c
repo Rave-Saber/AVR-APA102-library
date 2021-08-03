@@ -50,6 +50,15 @@ void initialize_pattern(const GenericPattern_t *pattern_data) {
             total_pattern_steps = wide_scroll_step_count();
             break;
         }
+        case GRADIENT: {
+            GradientArgs_t *args = (GradientArgs_t *) type_args;
+            total_pattern_steps = gradient_step_count(args->length, args->steps);
+            break;
+        }
+        case GRADIENT_BANDS: {
+            total_pattern_steps = gradient_bands_step_count((GradientBandsArgs_t *) type_args);
+            break;
+        }
         case SERIES: {
             // total_pattern_steps initialized in update_sequence
             SeriesArgs_t *args = (SeriesArgs_t *) type_args;
@@ -84,6 +93,12 @@ uint16_t update_sequence(const GenericPattern_t *pattern_data) {
             break;
         case WIDE_SCROLL:
             delay = wide_scroll_set_sequence((WideScrollArgs_t *) type_args);
+            break;
+        case GRADIENT:
+            delay = gradient_set_sequence((GradientArgs_t *) type_args);
+            break;
+        case GRADIENT_BANDS:
+            delay = gradient_bands_set_sequence((GradientBandsArgs_t *) type_args);
             break;
         case SERIES: {
             SeriesArgs_t *args = (SeriesArgs_t *) type_args;
@@ -214,6 +229,93 @@ uint16_t wide_scroll_set_sequence(const WideScrollArgs_t *args) {
         }
     }
     return args->delay;
+}
+
+
+/* GRADIENT */
+// fade between colors
+uint8_t gradient_step_count(const uint8_t sequence_len, const uint8_t gradient_steps) {
+    return sequence_len * gradient_steps;
+}
+uint8_t mix_color(const uint8_t first, const uint8_t second, const double mix) {
+    return first * (1 - mix) + second * mix;
+}
+uint16_t gradient_set_sequence(const GradientArgs_t *args) {
+    // which color did we last hit
+    const uint8_t color_number = current_pattern_step / args->steps;
+    // how far into the next color are we?
+    const uint8_t gradient_progression = current_pattern_step % args->steps;
+
+    const RGBColor_t current_color = *(args->sequence + color_number);
+    if (gradient_progression == 0) {
+        set_all(current_color);
+        return args->color_delay;
+    }
+
+    const RGBColor_t next_color = color_number == args->length - 1
+        ? *args->sequence : *(args->sequence + color_number + 1);
+
+    const double mix_amount = (double) gradient_progression / (double) args->steps;
+    RGBColor_t target_color = {
+        .red = mix_color(current_color.red, next_color.red, mix_amount),
+        .green = mix_color(current_color.green, next_color.green, mix_amount),
+        .blue = mix_color(current_color.blue, next_color.blue, mix_amount),
+    };
+
+    set_all(target_color);
+    return args->step_delay;
+}
+
+/* GRADIENT BANDS */
+// bands that fade between colors
+uint8_t gradient_bands_step_count(const GradientBandsArgs_t *args) {
+    return args->length * args->steps;
+}
+uint16_t gradient_bands_set_sequence(const GradientBandsArgs_t *args) {
+    // which color did we last hit
+    const uint8_t color_number = current_pattern_step / args->steps;
+    // how far into the next color are we?
+    const uint8_t gradient_progression = current_pattern_step % args->steps;
+
+    const uint8_t short_band_width = LED_COUNT / args->length;
+    const uint8_t long_bands = LED_COUNT % args->length;
+
+    for (uint8_t band = 0; band < args->length; band++) {
+        uint8_t band_start;
+        uint8_t width;
+        if (band < long_bands) {
+            band_start = band * (short_band_width + 1);
+            width = short_band_width + 1;
+        } else {
+            band_start = (short_band_width + 1) * long_bands
+                + short_band_width * (band - long_bands);
+            width = short_band_width;
+        }
+
+        const uint8_t offset = (color_number + band) % args->length;
+        const RGBColor_t current_color = *(args->sequence + offset);
+        if (gradient_progression == 0) {
+            for (uint8_t band_led = 0; band_led < width; band_led++) {
+                const uint8_t led_offset = band_start + band_led;
+                *(current_sequence + led_offset) = current_color;
+            }
+        } else {
+            const RGBColor_t next_color = offset == args->length - 1
+                ? *args->sequence : *(args->sequence + offset + 1);
+
+            const double mix_amount = (double) gradient_progression / (double) args->steps;
+            RGBColor_t target_color = {
+                .red = mix_color(current_color.red, next_color.red, mix_amount),
+                .green = mix_color(current_color.green, next_color.green, mix_amount),
+                .blue = mix_color(current_color.blue, next_color.blue, mix_amount),
+            };
+            for (uint8_t band_led = 0; band_led < width; band_led++) {
+                const uint8_t led_offset = band_start + band_led;
+                *(current_sequence + led_offset) = target_color;
+            }
+        }
+    }
+    return gradient_progression == 0 ? args->color_delay : args->step_delay;
 }
 
 

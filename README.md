@@ -68,7 +68,6 @@ effects & patterns modules to automatically scale any colors passed to them.
     * Make a pattern for fixed arrays of colors
     * Script to convert images to xpm, transpose rows/cols, & print array for
       inclusion in patterns file.
-* Color mixing/blending, building gradients between sequence of colors.
 * Use timer for delays instead of relying on delay functions?
     * Make it a compilation option in case no free timers? Or method that can
       re-use existing timer with different interrupt/ms rates.
